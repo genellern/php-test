@@ -4,6 +4,7 @@ class Rental
 {
     private float $total = 0;
     private int $earnedPoints = 0;
+    private int $frequentRenterPoints = 0;
 
     /**
      * @var Movie
@@ -61,5 +62,18 @@ class Rental
                 break;
         }
         return $this->total;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFrequentRenterPoints(): int
+    {
+        $this->frequentRenterPoints++;
+        if ($this->movie()->priceCode() === Movie::NEW_RELEASE &&
+            $this->daysRented() > 1) {
+            $this->frequentRenterPoints++;
+        }
+        return $this->frequentRenterPoints;
     }
 }

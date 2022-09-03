@@ -2,6 +2,8 @@
 
 class Customer
 {
+    private int $frequentRenterPoints = 0;
+
     /**
      * @var string
      */
@@ -46,11 +48,9 @@ class Customer
         $frequentRenterPoints = 0;
 
         $result = 'Rental Record for ' . $this->name() . PHP_EOL;
-
         $result .= 'Amount owed is ' . $totalAmount . PHP_EOL;
-
         $result .= $this->processRentals();
-
+//        $result .= "\t" . str_pad($rental->movie()->name(), 30, ' ', STR_PAD_RIGHT) . "\t" . $rental->getTotal() . PHP_EOL;
         $result .= 'You earned ' . $frequentRenterPoints . ' frequent renter points' . PHP_EOL;
 
         return $result;
@@ -62,12 +62,7 @@ class Customer
         $total = 0;
         foreach ($this->rentals as $rental) {
             $total += $rental->getTotal();
-            $result .= "\t" . str_pad($rental->movie()->name(), 30, ' ', STR_PAD_RIGHT) . "\t" . $rental->getTotal() . PHP_EOL;
-
-            $frequentRenterPoints++;
-            if ($rental->movie()->priceCode() === Movie::NEW_RELEASE && $rental->daysRented() > 1) {
-                $frequentRenterPoints++;
-            }
+            $this->frequentRenterPoints = $rental->getFrequentRenterPoints();
         }
         return $result;
     }
