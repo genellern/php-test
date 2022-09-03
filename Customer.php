@@ -16,16 +16,26 @@ class Customer
     private $rentals;
 
     private const stringRentalTemplate = <<<STRING_RENTAL_TEMPLATE
-Rental Record for %s
-Amount owed is %s
-%s
-You earned %s frequent renter points.\n
+Rental Record for {customerName}
+Amount owed is {total}
+{items}You earned {points} frequent renter points.\n
 STRING_RENTAL_TEMPLATE;
 
     private const stringRentalDetailTemplate = <<<STRING_RENTAL_DETAIL_TEMPLATE
     \t%s\t%s\n
     STRING_RENTAL_DETAIL_TEMPLATE;
 
+    private const htmlRentalTemplate = <<<HTML_RENTAL_TEMPLATE
+    <h1>Rental Record for <em>{customerName}</em></h1>
+    <ul>
+    {items}</ul>
+    <p>Amount owed is {total}</p>
+    <p>You earned <em>{points}</em> frequent renter points</p>>\n
+    HTML_RENTAL_TEMPLATE;
+
+    private const htmlRentalDetailTemplate = <<<HTML_RENTAL_DETAIL_TEMPLATE
+    <li>%s - %s</li>\n
+HTML_RENTAL_DETAIL_TEMPLATE;
 
     /**
      * @param string $name
@@ -64,9 +74,8 @@ STRING_RENTAL_TEMPLATE;
 
     private function processRentals(): void
     {
-        $total = 0;
         foreach ($this->rentals as $rental) {
-            $total += $rental->getTotal();
+            $this->total += $rental->getTotal();
             $this->frequentRenterPoints += $rental->getFrequentRenterPoints();
         }
     }
@@ -74,19 +83,26 @@ STRING_RENTAL_TEMPLATE;
     public function printStatement(bool $asString = true): string
     {
         $itemsDetail = "";
+        $statementTemplate = $asString ? self::stringRentalTemplate : self::htmlRentalTemplate;
+        $detailTemplate = $asString ? self::stringRentalDetailTemplate : self::htmlRentalDetailTemplate;
+        $paddingLength = $asString ? 30 : 0;
+
         foreach ($this->rentals as $rental) {
             $itemsDetail .= sprintf(
-                self::stringRentalDetailTemplate,
-                str_pad($rental->movie()->name(), 30, ' ', STR_PAD_RIGHT),
+                $detailTemplate,
+                str_pad($rental->movie()->name(), $paddingLength, ' ', STR_PAD_RIGHT),
                 $rental->getTotal()
             );
         }
-        return sprintf(
-            self::stringRentalTemplate,
-            $this->name(),
-            $this->total,
-            $itemsDetail,
-            $this->frequentRenterPoints
+
+        return strtr(
+            $statementTemplate,
+            [
+                '{customerName}' => $this->name(),
+                '{total}' => $this->total,
+                '{items}' => $itemsDetail,
+                '{points}' => $this->frequentRenterPoints
+            ]
         );
     }
 }

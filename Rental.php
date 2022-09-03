@@ -3,7 +3,6 @@
 class Rental
 {
     private float $total = 0;
-    private int $earnedPoints = 0;
     private int $frequentRenterPoints = 0;
 
     /**
