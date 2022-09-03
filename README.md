@@ -1,3 +1,11 @@
+# Installations steps
+
+- Install docker with docker-compose extension enabled.
+- Run the following command: `docker-compose up -d` to start up the container.
+- Run the following command: `docker-compose exec php bash` to open a shell console in the container.
+- Run the following command: `php index.php` to run the test.
+
+
 ## Introduction
 
 This example comes from the book Refactoring by Martin Fowler. The example is in PHP, but it is designed to be simple enough to understand - regardless of your experience with the language.

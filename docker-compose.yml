@@ -1,0 +1,8 @@
+version: '3'
+services:
+  php:
+      image: php:8.2.0alpha1-cli
+      container_name: core-php
+      tty: true
+      volumes:
+        - "./:/var/www/html"
