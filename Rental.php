@@ -2,21 +2,24 @@
 
 class Rental
 {
+    private float $total = 0;
+    private int $earnedPoints = 0;
+
     /**
      * @var Movie
      */
-    private $movie;
+    private Movie $movie;
 
     /**
      * @var int
      */
-    private $daysRented;
+    private int $daysRented;
 
     /**
      * @param Movie $movie
      * @param int $daysRented
      */
-    public function __construct(Movie $movie, $daysRented)
+    public function __construct(Movie $movie, int $daysRented)
     {
         $this->movie = $movie;
         $this->daysRented = $daysRented;
@@ -25,7 +28,7 @@ class Rental
     /**
      * @return Movie
      */
-    public function movie()
+    public function movie(): Movie
     {
         return $this->movie;
     }
@@ -33,8 +36,30 @@ class Rental
     /**
      * @return int
      */
-    public function daysRented()
+    public function daysRented(): int
     {
         return $this->daysRented;
+    }
+
+    public function getTotal(): float
+    {
+        switch($this->movie()->priceCode()) {
+            case Movie::REGULAR:
+                $this->total += 2;
+                if ($this->daysRented() > 2) {
+                    $this->total += ($this->daysRented() - 2) * 1.5;
+                }
+                break;
+            case Movie::NEW_RELEASE:
+                $this->total += $this->daysRented() * 3;
+                break;
+            case Movie::CHILDREN:
+                $this->total += 1.5;
+                if ($this->daysRented() > 3) {
+                    $this->total += ($this->daysRented() - 3) * 1.5;
+                }
+                break;
+        }
+        return $this->total;
     }
 }
