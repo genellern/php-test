@@ -4,10 +4,11 @@ require_once('Movie.php');
 require_once('Rental.php');
 require_once('Customer.php');
 
+// TODO Missing grouping rental in single bill/case.
 $rental1 = new Rental(
     new Movie(
         'Back to the Future',
-        Movie::CHILDRENS
+        Movie::CHILDREN
     ), 4
 );
 
