@@ -5,6 +5,15 @@ class Rental
     private float $total = 0;
     private int $frequentRenterPoints = 0;
 
+    public const PRICE_CATEGORY_CHILDREN = 2;
+    public const PRICE_CATEGORY_REGULAR = 0;
+    public const PRICE_CATEGORY_NEW_RELEASE = 1;
+
+    /**
+     * @var int
+     */
+    private int $priceCode;
+
     /**
      * @var Movie
      */
@@ -19,10 +28,13 @@ class Rental
      * @param Movie $movie
      * @param int $daysRented
      */
-    public function __construct(Movie $movie, int $daysRented)
+    public function __construct(Movie $movie, int $daysRented, int $priceCode)
     {
         $this->movie = $movie;
         $this->daysRented = $daysRented;
+        $this->priceCode = $priceCode;
+        $priceCalculator = $this->loadPriceCalculator();
+        $this->total = $priceCalculator->getTotal();
     }
 
     /**
@@ -41,26 +53,14 @@ class Rental
         return $this->daysRented;
     }
 
-    public function getTotal(): float
+    private function loadPriceCalculator(): RentalPriceCalculator
     {
-        switch($this->movie()->priceCode()) {
-            case Movie::REGULAR:
-                $this->total += 2;
-                if ($this->daysRented() > 2) {
-                    $this->total += ($this->daysRented() - 2) * 1.5;
-                }
-                break;
-            case Movie::NEW_RELEASE:
-                $this->total += $this->daysRented() * 3;
-                break;
-            case Movie::CHILDREN:
-                $this->total += 1.5;
-                if ($this->daysRented() > 3) {
-                    $this->total += ($this->daysRented() - 3) * 1.5;
-                }
-                break;
-        }
-        return $this->total;
+        return match ($this->priceCode) {
+            self::PRICE_CATEGORY_CHILDREN    => new ChildrenRentalPriceCalculator($this),
+            self::PRICE_CATEGORY_NEW_RELEASE => new NewReleaseRentalPriceCalculator($this),
+            self::PRICE_CATEGORY_REGULAR     => new RegularRentalPriceCalculator($this),
+            default                          => new RentalPriceCalculator($this)
+        };
     }
 
     /**
@@ -69,10 +69,28 @@ class Rental
     public function getFrequentRenterPoints(): int
     {
         $this->frequentRenterPoints++;
-        if ($this->movie()->priceCode() === Movie::NEW_RELEASE &&
+        if ($this->priceCode() === self::PRICE_CATEGORY_NEW_RELEASE &&
             $this->daysRented() > 1) {
             $this->frequentRenterPoints++;
         }
         return $this->frequentRenterPoints;
     }
+
+    /**
+     * @return float|int
+     */
+    public function getTotal(): float|int
+    {
+        return $this->total;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function priceCode(): int
+    {
+        return $this->priceCode;
+    }
+
 }

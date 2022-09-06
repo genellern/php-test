@@ -2,43 +2,25 @@
 
 class Movie
 {
-    const CHILDRENS = 2;
-    const REGULAR = 0;
-    const NEW_RELEASE = 1;
 
     /**
      * @var string
      */
-    private $name;
-
-    /**
-     * @var int
-     */
-    private $priceCode;
+    private string $name;
 
     /**
      * @param string $name
-     * @param int $priceCode
      */
-    public function __construct($name, $priceCode)
+    public function __construct(string $name)
     {
         $this->name = $name;
-        $this->priceCode = $priceCode;
     }
 
     /**
      * @return string
      */
-    public function name()
+    public function name(): string
     {
         return $this->name;
-    }
-
-    /**
-     * @return int
-     */
-    public function priceCode()
-    {
-        return $this->priceCode;
     }
 }

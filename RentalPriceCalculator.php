@@ -6,9 +6,19 @@ class RentalPriceCalculator
     private string $priceCode;
     protected Rental $rental;
 
-    public function __construct(string $priceCode)
+    public function __construct(Rental $rental)
     {
-        $this->priceCode = $priceCode;
+        $this->rental = $rental;
+        $this->priceCode = $rental->priceCode();
+        $this->calculate();
+    }
+
+    /**
+     * @return float|int
+     */
+    public function getTotal(): float|int
+    {
+        return $this->total;
     }
 
     /**
@@ -18,6 +28,6 @@ class RentalPriceCalculator
      */
     protected function calculate(): void
     {
-        $this->total += ($this->rental->daysRented() - 2) * 1;
+        $this->total += ($this->rental->daysRented() - 1);
     }
 }

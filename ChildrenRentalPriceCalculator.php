@@ -2,7 +2,6 @@
 
 class ChildrenRentalPriceCalculator extends RentalPriceCalculator
 {
-
     /**
      * @inheritDoc
      */
