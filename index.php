@@ -3,27 +3,28 @@
 require_once('Movie.php');
 require_once('Rental.php');
 require_once('Customer.php');
+require_once('RentalPriceCalculator.php');
+require_once('ChildrenRentalPriceCalculator.php');
+require_once('NewReleaseRentalPriceCalculator.php');
+require_once('RegularRentalPriceCalculator.php');
 
 // TODO Missing grouping rental in single bill/case.
 $rental1 = new Rental(
-    new Movie(
-        'Back to the Future',
-        Movie::CHILDREN
-    ), 4
+    new Movie('Back to the Future'),
+    4,
+    Rental::PRICE_CATEGORY_CHILDREN
 );
 
 $rental2 = new Rental(
-    new Movie(
-        'Office Space',
-        Movie::REGULAR
-    ), 3
+    new Movie('Office Space'),
+    3,
+    Rental::PRICE_CATEGORY_REGULAR
 );
 
 $rental3 = new Rental(
-    new Movie(
-        'The Big Lebowski',
-        Movie::NEW_RELEASE
-    ), 5
+    new Movie('The Big Lebowski'),
+    5,
+    Rental::PRICE_CATEGORY_NEW_RELEASE
 );
 
 $customer = new Customer('Joe Schmoe');
