@@ -49,7 +49,12 @@ You earned 4 frequent renter points
 ## Your Tasks
 
 1. The business requires statements in HTML - in addition to their current text output. The desired HTML output is shown below. Please implement a `Customer.htmlStatement()` method that returns this output.
-2. The business wants to change the movie classifications. They may, for example, wish to remove "Children's" or add a new classification called "SciFi". The classifications are defined as constants now, which is fairly inflexible.  This needs to be refactored for flexibility.  Then again, they may simply wish to change the algorithms for calculating frequent renter points. **In other words, the classification / pricing / points system needs to be more flexible.** (This task is intentionally open-ended.).  NOTE: no database is used or needed for this work.
+
+2. The business wants to change the movie classifications. They may, for example, wish to remove "Children's" or add a new classification called "SciFi". 
+   1. The classifications are defined as constants now, which is fairly inflexible.  This needs to be refactored for flexibility.  
+   2. Then again, they may simply wish to change the algorithms for calculating frequent renter points. 
+   3. **In other words, the classification / pricing / points system needs to be more flexible.
+   4. ** (This task is intentionally open-ended.).  NOTE: no database is used or needed for this work.
 
 ### HTML Output for Task #1
 
